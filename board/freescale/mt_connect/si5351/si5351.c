@@ -207,7 +207,7 @@ bool SI5351_Init(void)
     }
 
     // configure Output Enable and OEB pin enable control (OEB enabled but OEB pin pulled low)
-    SI5351_WriteRegister(dev, SI5351_OUTPUT_ENABLE, 0x00);
+    SI5351_WriteRegister(dev, SI5351_OUTPUT_ENABLE, 0xFF);
     SI5351_WriteRegister(dev, SI5351_OEB_PIN_ENABLE, 0x00);
 
     // configure PLL input source (CLKIN_DIV = 00b, PLLA_SRC = XTAL, PLLB_SRC = XTAL)
