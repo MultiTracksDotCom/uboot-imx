@@ -275,7 +275,7 @@ int dram_init_banksize(void)
 	int bank = 0;
 	int ret;
 	phys_size_t sdram_size;
-	phys_size_t sdram_b1_size, sdram_b2_size;
+	phys_size_t sdram_b1_size;
 
 	ret = board_phys_sdram_size(&sdram_size);
 	if (ret)
@@ -284,10 +284,8 @@ int dram_init_banksize(void)
 	/* Bank 1 can't cross over 4GB space */
 	if (sdram_size > 0xc0000000) {
 		sdram_b1_size = 0xc0000000;
-		sdram_b2_size = sdram_size - 0xc0000000;
 	} else {
 		sdram_b1_size = sdram_size;
-		sdram_b2_size = 0;
 	}
 
 	gd->bd->bi_dram[bank].start = PHYS_SDRAM;
@@ -310,14 +308,9 @@ int dram_init_banksize(void)
 		gd->bd->bi_dram[bank].size = sdram_b1_size;
 	}
 
-	if (sdram_b2_size) {
-		if (++bank >= CONFIG_NR_DRAM_BANKS) {
-			puts("CONFIG_NR_DRAM_BANKS is not enough for SDRAM_2\n");
-			return -1;
-		}
-		gd->bd->bi_dram[bank].start = 0x100000000UL;
-		gd->bd->bi_dram[bank].size = sdram_b2_size;
-	}
+	/*Define SRAM Region for M4 Text*/
+	gd->bd->bi_dram[1].start = TCML_M4_TEXT_SRAM_START;
+	gd->bd->bi_dram[1].size = TCML_M4_TEXT_SRAM_SIZE;
 
 	return 0;
 }
