@@ -218,11 +218,13 @@ bool SI5351_Init(void)
     SI5351_WriteRegister(dev, SI5351_PLL_INPUT_SOURCE, 0x00);
 
     // configure all clock controls
-    SI5351_WriteRegister(dev, SI5351_CLK0_CTRL, 0x3F); // dante SCLK
-    SI5351_WriteRegister(dev, SI5351_CLK1_CTRL, 0x2F); // dante LRCLK
-    SI5351_WriteRegister(dev, SI5351_CLK2_CTRL, 0x2F); // dante MCLK
-    SI5351_WriteRegister(dev, SI5351_CLK3_CTRL, 0x2F); // dante FBCLK
-    SI5351_WriteRegister(dev, SI5351_CLK4_CTRL, 0x0F); // ethernet
+    // Lowest drive (CLKx_IDRV = 00b, 2mA): the SI5351 alone drives these nets and
+    // the shared Dante clocks ring at 8mA. CLK4 (Ethernet) is matched.
+    SI5351_WriteRegister(dev, SI5351_CLK0_CTRL, 0x3C); // dante SCLK
+    SI5351_WriteRegister(dev, SI5351_CLK1_CTRL, 0x2C); // dante LRCLK
+    SI5351_WriteRegister(dev, SI5351_CLK2_CTRL, 0x2C); // dante MCLK
+    SI5351_WriteRegister(dev, SI5351_CLK3_CTRL, 0x2C); // dante FBCLK
+    SI5351_WriteRegister(dev, SI5351_CLK4_CTRL, 0x0C); // ethernet
     SI5351_WriteRegister(dev, SI5351_CLK5_CTRL, 0x8C); // disabled
     SI5351_WriteRegister(dev, SI5351_CLK6_CTRL, 0x8C); // disabled
     SI5351_WriteRegister(dev, SI5351_CLK7_CTRL, 0x8C); // disabled
